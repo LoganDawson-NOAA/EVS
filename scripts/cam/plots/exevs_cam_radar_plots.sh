@@ -56,6 +56,9 @@ export LOG_DIR=${SAVE_DIR}/logs
 export OUTPUT_DIR=${SAVE_DIR}/${VERIF_CASE}/${eval_period}
 export IMG_HEADER=${NET}.${COMPONENT}
 
+export RESTART_DIR=${COMOUTplots}/${VERIF_CASE}/restart
+export COMPLETED_JOBS_FILE=completed_jobs.txt
+
 export LOG_TEMPLATE="${LOG_DIR}/EVS_verif_plotting_job{njob}_`date '+%Y%m%d-%H%M%S'`_$$.out"
 export LOG_LEVEL="DEBUG"
 
@@ -69,15 +72,17 @@ printf -v MET_VERSION '%s.' "${MET_VER[@]:0:2}"
 export MET_VERSION="${MET_VERSION%.}"
 
 
-############################################################
-# Write poescript for each domain and use case
-############################################################
+###############################################################
+# Create working directories and symlink stat files from COMIN 
+# Mainly for HREF when product is included in model name 
+###############################################################
 
 # Create working directories 
 mkdir -p ${PRUNE_DIR}
 mkdir -p ${STAT_OUTPUT_BASE_DIR}
 mkdir -p ${LOG_DIR}
 mkdir -p ${OUTPUT_DIR}
+mkdir -p ${RESTART_DIR}
 
 
 model_list="hrrr namnest hireswarw hireswarwmem2 hireswfv3 href_pmmn"
@@ -108,7 +113,19 @@ for model in ${model_list}; do
 done
 
 
+############################################################
+# Check for Restart Files
+############################################################
 
+python ${USHevs}/cam/cam_production_restart.py
+export err=$?; err_chk
+
+
+############################################################
+# Write poescript for each plot type, domain, etc.
+############################################################
+
+njob=0
 
 if [ $LINE_TYPE = nbrcnt ]; then
    PLOT_TYPES="lead_average threshold_average"
@@ -116,8 +133,6 @@ elif [ $LINE_TYPE = nbrctc ]; then
    PLOT_TYPES="lead_average performance_diagram threshold_average"
 fi
 
-
-njob=0
 
 #Loop over plot types
 for PLOT_TYPE in ${PLOT_TYPES}; do
