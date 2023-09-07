@@ -39,40 +39,21 @@ export MODELNAME=aqm
 export modsys=aqm
 export mod_ver=${aqm_ver}
 
-export MET_bin_exec=bin
-
 export config=$HOMEevs/parm/evs_config/aqm/config.evs.aqm.prod
 source $config
 
 ########################################################################
 ## The following setting is for parallel test and need to be removed for operational code
 ########################################################################
-export DATA=/lfs/h2/emc/ptmp/$USER/EVS/${cyc}_${MODELNAME}
-
-rm -rf $DATA
-mkdir -p $DATA
-cd $DATA
+export DATAROOT=/lfs/h2/emc/stmp/${USER}/evs_test/$envir/tmp
 
 export cycle=t${cyc}z
 
-##
-## Instruction for Pull-Request testing
-## point COMIN to personal directory
-## output can be found at $COMOUT
-##
 export COMIN=/lfs/h2/emc/vpppg/noscrub/$USER/${NET}/${evs_ver}
-##
-## For aqmv7 NRT runs
-## export fcst_input_ver=v7
-## export COMINaqm=/lfs/h2/emc/ptmp/jianping.huang/emc.para/com/aqm/v7.0
-##
-## For AQMv6 restrospective output
-## export COMINaqm=/lfs/h2/emc/physics/noscrub/ho-chun.huang/verification/${MODELNAME}/${envir}
-##
-export COMOUT=$COMIN/${STEP}/${COMPONENT}
+export COMOUT=/lfs/h2/emc/vpppg/noscrub/${USER}/${NET}/${evs_ver}/${STEP}/${COMPONENT}/${RUN}
 
 #
-## export KEEPDATA=NO
+export KEEPDATA=NO
 #
 ########################################################################
 ## VDATE = ${PDYm2} is okay after 01Z today for the default

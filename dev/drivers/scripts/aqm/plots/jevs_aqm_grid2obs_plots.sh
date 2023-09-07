@@ -1,10 +1,10 @@
-#PBS -N jevs_aqm_grid2obs_plots_00
+#PBS -N jevs_aqm_grid2obs_plots
 #PBS -j oe
 #PBS -S /bin/bash
 #PBS -q "dev"
 #PBS -A VERF-DEV
 #PBS -l walltime=02:00:00
-#PBS -l select=1:ncpus=1:mem=2GB
+#PBS -l select=1:ncpus=128:mem=500GB
 #PBS -l debug=true
 
 set -x
@@ -42,8 +42,6 @@ export MODELNAME=aqm
 export modsys=aqm
 export mod_ver=${aqm}
 
-export MET_bin_exec=bin
-
 export config=$HOMEevs/parm/evs_config/aqm/config.evs.aqm.prod
 source $config
 
@@ -60,7 +58,7 @@ source $config
 ##
 export FIXevs=/lfs/h2/emc/vpppg/noscrub/emc.vpppg/verification/EVS_fix
 export DATAROOT=/lfs/h2/emc/stmp/${USER}/evs_test/$envir/tmp
-export KEEPDATA=YES
+export KEEPDATA=NO
 export job=${PBS_JOBNAME:-jevs_${MODELNAME}_${VERIF_CASE}_${STEP}}
 export jobid=$job.${PBS_JOBID:-$$}
 
@@ -81,11 +79,10 @@ export cycle=t${cyc}z
 ## setting to produce output to personal directory
 ## export COMIN=/lfs/h2/emc/physics/noscrub/$USER/${NET}/${evs_ver}
 ## export COMIN=/lfs/h2/emc/vpppg/noscrub/$USER/${NET}/${evs_ver}
-export COMIN=/lfs/h2/emc/ptmp/$USER/${NET}/${evs_ver}
-mkdir -p ${COMIN}
+export COMIN=/lfs/h2/emc/vpppg/noscrub/$USER/${NET}/${evs_ver}
 export COMINaqm=/lfs/h2/emc/vpppg/noscrub/emc.vpppg/evs/v1.0/stats/aqm/aqm
 
-export COMOUT=${COMIN}/${STEP}/${COMPONENT}
+export COMOUT=/lfs/h2/emc/ptmp/$USER/$NET/$evs_ver/${STEP}/${COMPONENT}
 #
 ## export KEEPDATA=NO
 #
