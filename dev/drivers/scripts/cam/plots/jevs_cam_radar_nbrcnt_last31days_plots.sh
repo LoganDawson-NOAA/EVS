@@ -1,10 +1,10 @@
-#PBS -N jevs_cam_severe_plots_00
+#PBS -N jevs_cam_radar_nbrcnt_last31days_plots
 #PBS -j oe
 #PBS -S /bin/bash
 #PBS -q dev
 #PBS -A VERF-DEV
-#PBS -l walltime=0:45:00
-#PBS -l place=vscatter:exclhost,select=1:ncpus=64:mem=500GB
+#PBS -l walltime=2:45:00
+#PBS -l place=vscatter:exclhost,select=1:ncpus=64
 #PBS -l debug=true
 #PBS -V
 
@@ -38,8 +38,8 @@ source $HOMEevs/modulefiles/$COMPONENT/${COMPONENT}_${STEP}.sh
 ############################################################
 export FIXevs=/lfs/h2/emc/vpppg/noscrub/emc.vpppg/verification/EVS_fix
 export DATAROOT=/lfs/h2/emc/stmp/${USER}/evs_test/$envir/tmp
-export KEEPDATA=NO
-export VERIF_CASE=severe
+export KEEPDATA=YES
+export VERIF_CASE=radar
 export MODELNAME=${COMPONENT}
 export job=${PBS_JOBNAME:-jevs_${MODELNAME}_${VERIF_CASE}_${LINE_TYPE}_${STEP}}
 export jobid=$job.${PBS_JOBID:-$$}
@@ -48,9 +48,9 @@ export COMOUT=/lfs/h2/emc/vpppg/noscrub/${USER}/$NET/$evs_ver/$STEP/$COMPONENT
 export nproc=64
 ############################################################
 
-export cyc=${cyc:-${cyc}}
-export EVAL_PERIOD=${EVAL_PERIOD:-${EVAL_PERIOD}}
-export LINE_TYPE=${LINE_TYPE:-${LINE_TYPE}}
+export cyc=${cyc:-00}
+export EVAL_PERIOD=${EVAL_PERIOD:-LAST31DAYS}
+export LINE_TYPE=${LINE_TYPE:-nbrcnt}
 
 export SENDCOM=${SENDCOM:-YES}
 export SENDECF=${SENDECF:-YES}
@@ -73,7 +73,7 @@ fi
 
 
 ######################################################################
-# Purpose: This job generates severe verification graphics
+# Purpose: This job generates radar verification graphics
 #          for the CAM component (deterministic and ensemble CAMs)
 ######################################################################
 
